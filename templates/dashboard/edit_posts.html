@@ -1,0 +1,22 @@
+<!-- templates/dashboard/edit_posts.html -->
+{% extends "../base/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row">
+    <!-- Left Sidebar -->
+    {% include './leftsidebar.html' %}
+
+    <!-- Right Sidebar -->
+    <div class="col-md-9">
+        <h3>Edit Post: {{ post.title }}</h3>
+
+        <form action="{% url 'edit_posts' post.id %}" method="POST" style="width: 500px;" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}  <!-- Render the form with crispy forms -->
+            <button type="submit" class="btn btn-warning">Update Post</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

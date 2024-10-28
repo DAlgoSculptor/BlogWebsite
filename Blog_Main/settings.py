@@ -124,10 +124,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-# STATIC_URL = '/static/'
-# STATICFILES_DIRS=[
-#     STATIC_DIR
-# ]
+STATIC_URL = '/static/'
+STATICFILES_DIRS=[
+    STATIC_DIR
+]
 
 
 # Default primary key field type
@@ -159,8 +159,8 @@ EMAIL_HOST_USER = 'nawazdanish6000gmail.com'  # Replace with your email
 EMAIL_HOST_PASSWORD = 'danish123@24w2'  # Replace with your password or app-specific password
 
 
-# settings.py
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "blogs/static",  # Adjust this according to your directory structure
-]
+# # settings.py
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     BASE_DIR / "blogs/static",  # Adjust this according to your directory structure
+# ]

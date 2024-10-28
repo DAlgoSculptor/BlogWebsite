@@ -13,8 +13,6 @@ class BlogPostForm(forms.ModelForm):
     class Meta:
         model=Blogs
 
-        fields='__all__'
-
-    class Meta:
-        model = Blogs
-        exclude = ['created_at', 'updated_at']  # Example of fields to exclude
+        fields=('title','Category','author','blog_image','short_description','blog_body','status','is_feacherd')
+        
+        exclude = ['created_at', 'updated_at']
