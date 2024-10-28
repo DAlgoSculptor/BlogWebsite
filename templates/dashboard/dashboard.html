@@ -1,0 +1,37 @@
+{% extends '../base/base.html' %}
+
+{% block content %}
+<div class="row">
+    <!-- Left Sidebar -->
+   <!-- load left sidebar -->
+   {% include './leftsidebar.html' %}
+
+    <!-- Right Sidebar -->
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col">
+                <div class="card border-default mb-3">
+                    <div class="card-header text-center text-uppercase font-weight-bold">
+                       <h3 class="text-dark">All Categories</h3>
+                    </div>
+                    <div class="card-body text-dark">
+                        <h5 class="cart-title text-center">{{category_counts}}</h5>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col">
+                <div class="card border-default mb-3">
+                    <div class="card-header text-center text-uppercase font-weight-bold">
+                       <h3 class="text-dark">All Pots</h3>
+                    </div>
+                    <div class="card-body text-dark">
+                        <h5 class="cart-title text-center">{{blogs_counts}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
