@@ -3,7 +3,9 @@
 {% block content %}
 
 <!-- Page content -->
-<div class="container mt-5">
+<div class="container mt-5" 
+     style="max-width: 1200px; margin: auto; padding: 50px; background: #f9f9f9; border-radius: 15px; border: 5px solid #001230; box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.1); font-family: 'Arial', sans-serif; 
+            transition: border-color 0.3s ease;">
     <div class="row">
         <div class="col-lg-8">
             <!-- Post content -->
@@ -11,84 +13,76 @@
                 <!-- Post header -->
                 <header class="mb-4">
                     <!-- Post title -->
-                    <h1 class="fw-bolder mb-1">{{single_post.title}}</h1>
+                    <h1 style="font-size: 3.5em; font-weight: 700; color: #333; margin-bottom: 20px; letter-spacing: -1.5px;">{{ single_post.title }}</h1>
                     <!-- Post meta content -->
-                    <div class="text-muted fst-italic mb-2">Posted on {{single_post.created_at}} by {{single_post.author}}</div>
+                    <div class="text-muted fst-italic mb-3" style="font-size: 1.1em; color: #6c757d;">Posted on {{ single_post.created_at }} by {{ single_post.author }}</div>
                     <!-- Post category -->
-                    <a class="badge bg-warning text-decoration-none text-light" href="#!">{{single_post.Category}}</a>
+                    <a href="#!" style="background-color: #4285F4; color: #fff; padding: 10px 16px; border-radius: 20px; font-size: 0.95em; text-transform: uppercase; letter-spacing: 0.5px;">{{ single_post.Category }}</a>
                 </header>
+                
                 <!-- Preview image figure -->
-                <figure class="mb-4"><img class="img-fluid rounded" src="{{single_post.blog_image.url}}" alt="..." /></figure>
+                <figure class="mb-5" style="overflow: hidden; border-radius: 12px;">
+                    <img src="{{ single_post.blog_image.url }}" alt="..." style="width: 100%; height: auto; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                </figure>
+                
                 <!-- Post content -->
-                <section class="mb-5">
-                    <p class="fs-5 mb-4">{{single_post.short_description}}</p>
-                    <p class="fs-5 mb-4">{{single_post.blog_body}}</p>
-                    <!--Comments -->
-                    <h4>Comments({{ comment_count }})</h4>
+                <section class="mb-5 post-content" style="line-height: 1.9;">
+                    <p style="font-size: 1.2em; color: #555;">{{ single_post.short_description }}</p>
+                    <p style="font-size: 1.2em; color: #555;">{{ single_post.blog_body }}</p>
+                    
+                    <!-- Comments Section -->
+                    <h4 style="font-weight: 600; font-size: 1.6em; color: #333; margin-top: 40px;">Comments ({{ comment_count }})</h4>
                     {% if comments %}
-                     {% for comment in comments %}
-                       <div class="card">
-                         <div class="card-body">
-                            <p class="card-text mb-0">{{comment}}</p>
-                            <span>
-                                <small>{{ comment.user }}</small>
-                                <small>{{ comment.created_at|timesince }} ago</small>
-                            </span>
-                         </div>
-                       </div>
-                     {% endfor %}
+                        {% for comment in comments %}
+                            <div style="margin-top: 20px; padding: 20px; background: #ffffff; border-radius: 10px; box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.05);">
+                                <p style="font-size: 1.05em; color: #333;">{{ comment }}</p>
+                                <div style="font-size: 0.95em; color: #6c757d;">
+                                    <span>{{ comment.user }}</span> • <span>{{ comment.created_at|timesince }} ago</span>
+                                </div>
+                            </div>
+                        {% endfor %}
                     {% else %}
-                    No Comments Yet
+                        <p style="color: #888;">No Comments Yet</p>
                     {% endif %}
-                    <div class="form-group">
+                    
+                    <!-- Comment Form -->
+                    <div class="form-group mt-4">
                         {% if user.is_authenticated %}
-                        <form action="" method="POST">
-                           {% csrf_token %}
-                           <div class="form-group">
-                            <textarea name="comment" class="form-control" placeholder="Write your comment"></textarea>
-                            <input type="submit" class="btn btn-primary mt-2 ">
-                           </div>
-                        </form>
+                            <form action="" method="POST" style="display: flex; flex-direction: column;">
+                                {% csrf_token %}
+                                <textarea name="comment" placeholder="Write your comment" style="border: 2px solid #ddd; padding: 12px; border-radius: 10px; resize: vertical; min-height: 120px; font-size: 1.1em; margin-bottom: 15px; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='#FF6347'" onblur="this.style.borderColor='#ddd'"></textarea>
+                                <input type="submit" value="Post Comment" style="padding: 12px 25px; background-color: #FF6347; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background-color 0.3s, transform 0.3s;" onmouseover="this.style.backgroundColor='#FF4500'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#FF6347'; this.style.transform='scale(1)'">
+                            </form>
                         {% else %}
-                        <p>Please <span><a href="{% url 'Login' %}" style="color: #007bff; text-decoration: none;" onmouseover="this.style.color='#ff5733'" onmouseout="this.style.color='#007bff'">Login</a></span> to write the comment!</p>
-
+                            <p style="margin-top: 15px;">Please <a href="{% url 'Login' %}" style="color: #4285F4; text-decoration: none;" onmouseover="this.style.color='#3367D6'" onmouseout="this.style.color='#4285F4'">login</a> to write a comment!</p>
                         {% endif %}
                     </div>
                 </section>
             </article>
         </div>
-
-        <!-- Side widgets -->
+        
+        <!-- Sidebar Widgets -->
         <div class="col-lg-4">
-           
-
-            <!-- Categories widget -->
-            <div class="card mb-4">
-                <div class="card-header">Categories</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="list-unstyled mb-0">
-                                {% for cat in categories %}
-                                <li><a href="{% url 'posts_by_category' cat.id %}">{{ cat.category_name }}</a></li>
-
-                                {% endfor %}
-                                
-                            </ul>
-                        </div>
-                        
-                    </div>
+            <!-- Categories Widget -->
+            <div class="card mb-5" style="border: none; box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05); border-radius: 10px;">
+                <div class="card-header" style="background-color: #4285F4; color: white; font-weight: 600; border-top-left-radius: 10px; border-top-right-radius: 10px;">Categories</div>
+                <div class="card-body" style="padding: 25px;">
+                    <ul style="list-style-type: none; padding: 0;">
+                        {% for cat in categories %}
+                            <li style="margin-bottom: 12px;"><a href="{% url 'posts_by_category' cat.id %}" style="color: #34A853; font-weight: 500; font-size: 1.05em; text-decoration: none;" onmouseover="this.style.color='#0F9D58'" onmouseout="this.style.color='#34A853'">{{ cat.category_name }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
 
-            <!-- Follow Us widget -->
-            <div class="card mb-4">
-                <div class="card-header">Follow Us</div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li><a href="https://github.com/DAlgoSculptor">GitHub</a></li>
-                        <li><a href="https://www.linkedin.com/in/danish-nawaz-86154028a/">LinkedIn</a></li>
-                        <li><a href="https://x.com/DNawaz65591">Twitter</a></li>
+            <!-- Follow Us Widget -->
+            <div class="card mb-5" style="border: none; box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05); border-radius: 10px;">
+                <div class="card-header" style="background-color: #34A853; color: white; font-weight: 600; border-top-left-radius: 10px; border-top-right-radius: 10px;">Follow Us</div>
+                <div class="card-body" style="padding: 25px;">
+                    <ul style="list-style-type: none; padding: 0;">
+                        <li style="margin-bottom: 12px;"><a href="https://github.com/DAlgoSculptor" style="color: #FFBE0B; font-weight: 500; font-size: 1.05em; text-decoration: none;" onmouseover="this.style.color='#FF9800'" onmouseout="this.style.color='#FFBE0B'">GitHub</a></li>
+                        <li style="margin-bottom: 12px;"><a href="https://www.linkedin.com/in/danish-nawaz-86154028a/" style="color: #4285F4; font-weight: 500; font-size: 1.05em; text-decoration: none;" onmouseover="this.style.color='#3367D6'" onmouseout="this.style.color='#4285F4'">LinkedIn</a></li>
+                        <li><a href="https://x.com/DNawaz65591" style="color: #FF6347; font-weight: 500; font-size: 1.05em; text-decoration: none;" onmouseover="this.style.color='#FF4500'" onmouseout="this.style.color='#FF6347'">Twitter</a></li>
                     </ul>
                 </div>
             </div>
