@@ -50,6 +50,7 @@ class Comment(models.Model):
     comment = models.TextField(max_length=250)  # Lowercase 'comment'
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
+    likes = models.PositiveIntegerField(default=0)  # Add this field to count likes
 
     def __str__(self):
         return self.comment  # Access the field with correct casing

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from blogs.models import Category, Blogs
+from blogs.models import Category, Blogs , Comment
 from django.contrib.auth.decorators import login_required
 from .forms import CategoryForm, BlogPostForm
 from django.template.defaultfilters import slugify
@@ -163,3 +163,16 @@ def delete_user(request, pk):
     user = get_object_or_404(User , pk=pk)
     user.delete()
     return redirect('users')
+
+
+
+
+
+# Comments function
+def delete_comment(request, pk):
+    comment_instance = get_object_or_404(Comment, pk=pk)
+    comment_instance.delete()
+    # return redirect('users')
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+

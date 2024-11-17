@@ -34,11 +34,20 @@
                     <h4 style="font-weight: 600; font-size: 1.6em; color: #333; margin-top: 40px;">Comments ({{ comment_count }})</h4>
                     {% if comments %}
                         {% for comment in comments %}
-                            <div style="margin-top: 20px; padding: 20px; background: #ffffff; border-radius: 10px; box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.05);">
+                            <div style="margin-top: 20px; padding: 20px; background: #ffffff; border-radius: 10px; box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.05); border: 2px solid red;">
                                 <p style="font-size: 1.05em; color: #333;">{{ comment }}</p>
                                 <div style="font-size: 0.95em; color: #6c757d;">
                                     <span>{{ comment.user }}</span> • <span>{{ comment.created_at|timesince }} ago</span>
                                 </div>
+                                
+                                {% if user.is_authenticated and comment.user == user %}
+                                    <!-- Delete button -->
+                                    <form action="{% url 'delete_comment' comment.id %}" method="POST" style="margin-top: 10px;">
+                                        {% csrf_token %}
+                                        <button type="submit" style="padding: 5px 10px; background-color: #FF6347; color: white; border: none; border-radius: 5px; font-size: 0.9em; cursor: pointer;"
+                                            onmouseover="this.style.backgroundColor='#FF4500'" onmouseout="this.style.backgroundColor='#FF6347'">Delete</button>
+                                    </form>
+                                {% endif %}
                             </div>
                         {% endfor %}
                     {% else %}
@@ -50,8 +59,8 @@
                         {% if user.is_authenticated %}
                             <form action="" method="POST" style="display: flex; flex-direction: column;">
                                 {% csrf_token %}
-                                <textarea name="comment" placeholder="Write your comment" style="border: 2px solid #ddd; padding: 12px; border-radius: 10px; resize: vertical; min-height: 120px; font-size: 1.1em; margin-bottom: 15px; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='#FF6347'" onblur="this.style.borderColor='#ddd'"></textarea>
-                                <input type="submit" value="Post Comment" style="padding: 12px 25px; background-color: #FF6347; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background-color 0.3s, transform 0.3s;" onmouseover="this.style.backgroundColor='#FF4500'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#FF6347'; this.style.transform='scale(1)'">
+                                <textarea name="comment" placeholder="Write your comment" style="border: 2px solid green; padding: 12px; border-radius: 10px; resize: vertical; min-height: 120px; font-size: 1.1em; margin-bottom: 15px; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='#FF6347'" onblur="this.style.borderColor='green'"></textarea>
+                                <input type="submit" value="Submit" style="padding: 12px 25px; background-color: #FF6347; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background-color 0.3s, transform 0.3s;" onmouseover="this.style.backgroundColor='#FF4500'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#FF6347'; this.style.transform='scale(1)'">
                             </form>
                         {% else %}
                             <p style="margin-top: 15px;">Please <a href="{% url 'Login' %}" style="color: #4285F4; text-decoration: none;" onmouseover="this.style.color='#3367D6'" onmouseout="this.style.color='#4285F4'">login</a> to write a comment!</p>

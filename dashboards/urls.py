@@ -25,4 +25,11 @@ urlpatterns = [
     path('users/add/' , views.add_users, name='add_users'),
     path('users/edit/<int:pk>/' , views.edit_user, name='edit_user'),
     path('users/delete/<int:pk>/' , views.delete_user, name='delete_user'),
+
+
+
+     # path for comments
+    # Pass `pk` as part of the URL
+    path('comments/delete/<int:pk>/', views.delete_comment, name='delete_comment'),
+    # path('post/<int:post_id>/', views.single_post, name='single_post'),
 ]
