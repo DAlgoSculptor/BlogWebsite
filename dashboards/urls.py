@@ -28,8 +28,7 @@ urlpatterns = [
 
 
 
-     # path for comments
-    # Pass `pk` as part of the URL
+    # path for comments
     path('comments/delete/<int:pk>/', views.delete_comment, name='delete_comment'),
     # path('post/<int:post_id>/', views.single_post, name='single_post'),
 ]
