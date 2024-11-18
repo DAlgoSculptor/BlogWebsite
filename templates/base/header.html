@@ -33,7 +33,10 @@
             <a class="btn btn-sm btn-warning" href="{% url 'Login' %}">Login</a> &nbsp;
             <a class="btn btn-sm btn-outline-secondary" href="{% url 'register' %}">Register</a>
             {% else %}
-            <span><a href="{% url 'dashboard' %}"class="btn btn-warning">Dashboard</a></span> &nbsp;
+            <span><a href="{% url 'dashboard' %}"class="btn btn-warning">
+              <i class ="fa fa-user-plus"></i> Dashboard
+
+            </a></span> &nbsp;
             <span><a href="{% url 'logout' %}">Logout</a></span>
             {% endif %}
           </div>
