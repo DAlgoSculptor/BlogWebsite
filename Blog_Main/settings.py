@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-eqju@o7#jes4jetvml8!$xytnv7vg(l1ek)wn2*n(cel)eq&yr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['BlogAppDanish.onrender.com']
 
 
 # Application definition
@@ -164,3 +164,6 @@ EMAIL_HOST_PASSWORD = 'danish123@24w2'  # Replace with your password or app-spec
 # STATICFILES_DIRS = [
 #     BASE_DIR / "blogs/static",  # Adjust this according to your directory structure
 # ]
+
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
