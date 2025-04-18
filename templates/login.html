@@ -2,10 +2,386 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
-<h3 class="text-center">Login</h3>
-<form action="{% url 'Login' %}" method="POST" style="width: 500px; margin: auto;">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <input type="submit" value="Login" class="btn btn-warning" />
-</form>
+{% load static %}
+
+<style>
+    .login-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .login-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #ffc107, #ff9800);
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .login-header h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #ffc107;
+        box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 0.75rem;
+        background: #ffc107;
+        border: none;
+        border-radius: 8px;
+        color: #2c3e50;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    .btn-login:hover {
+        background: #ffca2c;
+        transform: translateY(-2px);
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .login-footer a {
+        color: #ffc107;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .login-footer a:hover {
+        color: #ff9800;
+    }
+
+    .form-check {
+        margin-bottom: 1rem;
+    }
+
+    .form-check-input:checked {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+    .alert {
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 576px) {
+        .login-card {
+            padding: 2rem 1.5rem;
+        }
+    }
+
+    .social-login {
+        margin: 1.5rem 0;
+        text-align: center;
+    }
+
+    .social-login p {
+        color: #6c757d;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .social-login p::before,
+    .social-login p::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 45%;
+        height: 1px;
+        background: #e9ecef;
+    }
+
+    .social-login p::before {
+        left: 0;
+    }
+
+    .social-login p::after {
+        right: 0;
+    }
+
+    .btn-social {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        color: #2c3e50;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-bottom: 0.75rem;
+    }
+
+    .btn-social:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .btn-social img {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.75rem;
+    }
+
+    .btn-google {
+        background: white;
+    }
+
+    .btn-github {
+        background: #24292e;
+        color: white;
+        border-color: #24292e;
+    }
+
+    .btn-github:hover {
+        background: #2f363d;
+    }
+
+    .btn-twitter {
+        background: #1da1f2;
+        color: white;
+        border-color: #1da1f2;
+    }
+
+    .btn-twitter:hover {
+        background: #1a8cd8;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to continue to your account</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="social-login">
+            <button class="btn-social btn-google" onclick="signInWithGoogle()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
+                Continue with Google
+            </button>
+            <button class="btn-social btn-github" onclick="signInWithGithub()">
+                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub">
+                Continue with GitHub
+            </button>
+            <p>or</p>
+        </div>
+
+        <form action="{% url 'Login' %}" method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username" class="form-label">Username</label>
+                <input type="text" name="username" id="id_username" class="form-control" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password" class="form-label">Password</label>
+                <input type="password" name="password" id="id_password" class="form-control" required>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">Remember me</label>
+            </div>
+
+            <button type="submit" class="btn btn-login">
+                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+            <p><a href="#">Forgot your password?</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Google Sign In
+    function signInWithGoogle() {
+        console.log('Attempting Google sign in...');
+        const provider = new firebase.auth.GoogleAuthProvider();
+        
+        // Add additional scopes if needed
+        provider.addScope('https://www.googleapis.com/auth/userinfo.email');
+        provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+        
+        // Set custom parameters
+        provider.setCustomParameters({
+            prompt: 'select_account'
+        });
+
+        firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                console.log('Google sign in successful:', result);
+                const user = result.user;
+                console.log('User details:', {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL
+                });
+                sendUserDataToBackend(user);
+            })
+            .catch((error) => {
+                console.error('Google sign in error:', error);
+                // Handle specific error cases
+                if (error.code === 'auth/unauthorized-domain') {
+                    alert('This domain is not authorized. Please check Firebase Console settings.');
+                } else if (error.code === 'auth/popup-blocked') {
+                    alert('Popup was blocked by the browser. Please allow popups for this site.');
+                } else if (error.code === 'auth/popup-closed-by-user') {
+                    console.log('Sign in popup was closed by user');
+                } else {
+                    alert('Google sign in failed: ' + error.message);
+                }
+            });
+    }
+
+    // GitHub Sign In
+    function signInWithGithub() {
+        console.log('Attempting GitHub sign in...');
+        const provider = new firebase.auth.GithubAuthProvider();
+        firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                console.log('GitHub sign in successful:', result);
+                const user = result.user;
+                sendUserDataToBackend(user);
+            })
+            .catch((error) => {
+                console.error('GitHub sign in error:', error);
+                alert('GitHub sign in failed: ' + error.message);
+            });
+    }
+
+    // Send user data to Django backend
+    function sendUserDataToBackend(user) {
+        console.log('Sending user data to backend:', user);
+        const csrfToken = getCookie('csrftoken');
+        console.log('CSRF Token:', csrfToken);
+
+        fetch('/auth/firebase/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                provider: user.providerData[0].providerId
+            })
+        })
+        .then(response => {
+            console.log('Backend response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Backend response data:', data);
+            if (data.success) {
+                window.location.href = '/dashboard/';
+            } else {
+                alert('Authentication failed: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error sending data to backend:', error);
+            alert('Error communicating with server: ' + error.message);
+        });
+    }
+
+    // Helper function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Add focus effect to form inputs
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.parentElement.classList.remove('focused');
+            }
+        });
+    });
+</script>
 {% endblock %}

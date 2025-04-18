@@ -5,48 +5,567 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlogWebApp</title>
-    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
-    <link href="css/blog.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/blog.css'%}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>CircadiaN Blog</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    <style>
+        :root {
+            --primary-color: #ffc107;
+            --secondary-color: #2c3e50;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
+
+        .navbar .container-fluid {
+            padding: 0 2rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, rgba(255, 193, 7, 0.1), transparent);
+        }
+
+        .brand-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-name {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            opacity: 0.9;
+        }
+
+        .navbar-nav {
+            gap: 0.5rem;
+            margin: 0 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-color) !important;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            background-color: rgba(255, 193, 7, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: rgba(255, 193, 7, 0.1);
+            font-weight: 600;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 2rem;
+            flex: 1;
+        }
+
+        .search-form {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            padding-left: 3rem;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.1);
+            background-color: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            color: var(--primary-color);
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-buttons .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .auth-buttons .btn-warning {
+            background-color: var(--primary-color);
+            border: none;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+        }
+
+        .auth-buttons .btn-warning:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+        }
+
+        .auth-buttons .btn-outline-secondary {
+            border: 2px solid var(--text-color);
+            color: var(--text-color);
+        }
+
+        .auth-buttons .btn-outline-secondary:hover {
+            background-color: var(--text-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 0.5rem 0;
+            min-width: 220px;
+            display: none;
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+
+        .user-dropdown:hover .user-dropdown-menu {
+            display: block;
+        }
+
+        .user-dropdown-item {
+            padding: 0.75rem 1.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary-color);
+            padding-left: 2rem;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar .container-fluid {
+                padding: 0 1rem;
+            }
+
+            .navbar-nav {
+                margin: 1rem 0;
+                gap: 0.25rem;
+            }
+
+            .search-container {
+                margin: 1rem 0;
+            }
+
+            .auth-buttons {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+
+            .user-dropdown-menu {
+                position: static;
+                box-shadow: none;
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 767.98px) {
+            .navbar-brand {
+                padding: 0.5rem;
+            }
+
+            .brand-icon {
+                font-size: 1.5rem;
+            }
+
+            .brand-name {
+                font-size: 1.25rem;
+            }
+
+            .brand-subtitle {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Dark mode styles */
+        [data-theme="dark"] {
+            --primary-color: #ffc107;
+            --secondary-color: #ffffff;
+            --text-color: #ffffff;
+            --light-bg: #2d2d2d;
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .navbar {
+            background-color: #2d2d2d !important;
+            border-bottom: 1px solid #404040;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        [data-theme="dark"] .navbar-brand::before {
+            background: linear-gradient(45deg, var(--primary-color), transparent);
+        }
+
+        [data-theme="dark"] .brand-name {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .brand-subtitle {
+            color: var(--primary-color);
+        }
+
+        [data-theme="dark"] .navbar-brand {
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .navbar-brand:hover {
+            color: var(--primary-color) !important;
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        [data-theme="dark"] .nav-link {
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .nav-link:hover {
+            color: var(--primary-color) !important;
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        [data-theme="dark"] .search-input {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: #404040;
+        }
+
+        [data-theme="dark"] .search-input:focus {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+        }
+
+        [data-theme="dark"] .search-icon {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .search-btn {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .search-btn:hover {
+            color: var(--primary-color);
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        [data-theme="dark"] .search-suggestions {
+            background-color: #2d2d2d;
+            border: 1px solid #404040;
+        }
+
+        [data-theme="dark"] .suggestion-item {
+            border-bottom: 1px solid #404040;
+        }
+
+        [data-theme="dark"] .suggestion-item:hover {
+            background-color: #404040;
+        }
+
+        [data-theme="dark"] .suggestion-item .category {
+            color: #adb5bd;
+        }
+
+        [data-theme="dark"] .btn-warning {
+            background-color: var(--primary-color);
+            color: #2d2d2d;
+        }
+
+        [data-theme="dark"] .btn-warning:hover {
+            background-color: #e0a800;
+            color: #2d2d2d;
+        }
+
+        [data-theme="dark"] .btn-outline-secondary {
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .btn-outline-secondary:hover {
+            background-color: #ffffff;
+            color: #2d2d2d;
+        }
+
+        [data-theme="dark"] .user-dropdown-menu {
+            background-color: #2d2d2d;
+            border: 1px solid #404040;
+        }
+
+        [data-theme="dark"] .user-dropdown-item {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .user-dropdown-item:hover {
+            background-color: #404040;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 991.98px) {
+            [data-theme="dark"] .navbar-collapse {
+                background-color: #2d2d2d;
+                border: 1px solid #404040;
+            }
+        }
+    </style>
   </head>
 <body>
-    <div class="container">
-      <header class="blog-header py-3">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-          <div class="col-4 pt-1">
-            <a class="blog-header-logo text-dark" href="/">CircadiaN BloG</a>
-          </div>
-          <div class="clo-4">
-            <form action="{% url 'search' %}" method="GET">
-              <div class="input-group">
-                <input class="form-control" name="keyword" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                <button type="submit" class="btn btn-warning" id="button-search" type="button">Go!</button>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand" href="/">
+                    <span class="brand-icon">
+                        <i class="fas fa-blog"></i>
+                    </span>
+                    <span class="brand-text">
+                        <span class="brand-name">CircadiaN</span>
+                        <span class="brand-subtitle">Blog</span>
+                    </span>
+                </a>
             </div>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% for cat in categories %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'posts_by_category' cat.id %}">
+                            {{ cat.category_name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="search-container">
+                    <form action="{% url 'search' %}" method="GET" class="search-form">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="keyword" class="search-input" placeholder="Search articles..." autocomplete="off">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
             </form>
           </div>
           
-          <div class="col-4 d-flex justify-content-end align-items-center">
+                <div class="auth-buttons">
             {% if not user.is_authenticated %}
-            <a class="btn btn-sm btn-warning" href="{% url 'Login' %}">Login</a> &nbsp;
-            <a class="btn btn-sm btn-outline-secondary" href="{% url 'register' %}">Register</a>
+                        <a href="{% url 'Login' %}" class="btn btn-warning">Login</a>
+                        <a href="{% url 'register' %}" class="btn btn-outline-secondary">Register</a>
             {% else %}
-            <span><a href="{% url 'dashboard' %}"class="btn btn-warning">
-              <i class ="fa fa-user-plus"></i> Dashboard
-
-            </a></span> &nbsp;
-            <span><a href="{% url 'logout' %}">Logout</a></span>
+                        <div class="user-dropdown">
+                            <a href="{% url 'dashboard' %}" class="btn btn-warning">
+                                <i class="fas fa-user me-2"></i>Dashboard
+                            </a>
+                            <div class="user-dropdown-menu">
+                                <a href="{% url 'dashboard' %}" class="user-dropdown-item">
+                                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                </a>
+                                <a href="{% url 'logout' %}" class="user-dropdown-item">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </div>
+                        </div>
             {% endif %}
+                </div>
           </div>
         </div>
-      </header>
+    </nav>
 
-      <div class="nav-scroller py-1 mb-2">
-        <nav class="nav d-flex justify-content-between">
-          {% for cat in  categories %}
-          <a class="p-2 text-muted" href="{% url 'posts_by_category' cat.id%}">{{cat.category_name}}</a>
-          {% endfor %}
-        </nav>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add active class to current nav item
+        const currentLocation = location.pathname;
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentLocation) {
+                link.classList.add('active');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const navbar = document.querySelector('.navbar-collapse');
+            const toggler = document.querySelector('.navbar-toggler');
+            
+            if (navbar.classList.contains('show') && 
+                !navbar.contains(e.target) && 
+                !toggler.contains(e.target)) {
+                toggler.click();
+            }
+        });
+
+        // Enhanced Search Functionality
+        const searchInput = document.querySelector('.search-input');
+        const searchSuggestions = document.querySelector('.search-suggestions');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                searchSuggestions.classList.remove('active');
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                // Here you would typically make an AJAX call to your backend
+                // For now, we'll simulate some suggestions
+                const suggestions = [
+                    { title: 'Django Tutorial', category: 'Programming' },
+                    { title: 'Web Development Tips', category: 'Development' },
+                    { title: 'Python Best Practices', category: 'Programming' }
+                ];
+
+                const suggestionsHTML = suggestions.map(suggestion => `
+                    <div class="suggestion-item">
+                        <div class="title">${suggestion.title}</div>
+                        <div class="category">${suggestion.category}</div>
       </div>
+                `).join('');
+
+                searchSuggestions.innerHTML = suggestionsHTML;
+                searchSuggestions.classList.add('active');
+
+                // Add click handlers to suggestions
+                document.querySelectorAll('.suggestion-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const title = this.querySelector('.title').textContent;
+                        searchInput.value = title;
+                        searchSuggestions.classList.remove('active');
+                        searchInput.focus();
+                    });
+                });
+            }, 300);
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                searchSuggestions.classList.remove('active');
+            }
+        });
+
+        // Handle keyboard navigation
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                const suggestions = document.querySelectorAll('.suggestion-item');
+                const currentIndex = Array.from(suggestions).indexOf(document.activeElement);
+                
+                if (e.key === 'ArrowDown') {
+                    const nextIndex = (currentIndex + 1) % suggestions.length;
+                    suggestions[nextIndex].focus();
+                } else {
+                    const prevIndex = (currentIndex - 1 + suggestions.length) % suggestions.length;
+                    suggestions[prevIndex].focus();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

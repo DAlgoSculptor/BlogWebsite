@@ -3,5 +3,6 @@ from .import views
 
 
 urlpatterns = [
-    path('<int:category_id>/' , views.posts_by_category , name='posts_by_category')
+    path('<int:category_id>/' , views.posts_by_category , name='posts_by_category'),
+    path('auth/firebase/', views.firebase_auth, name='firebase_auth'),
 ]

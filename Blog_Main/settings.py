@@ -16,8 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-STATIC_DIR=os.path.join(BASE_DIR, 'static')
-
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -27,8 +26,6 @@ SECRET_KEY = 'django-insecure-eqju@o7#jes4jetvml8!$xytnv7vg(l1ek)wn2*n(cel)eq&yr
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-# import os
 
 ALLOWED_HOSTS = ['Blogwebsite.vercel.app', '127.0.0.1']
 
@@ -45,12 +42,12 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'taggit',
-    'dashboards'
+    'dashboards',
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # Add this middleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -64,7 +61,7 @@ ROOT_URLCONF = 'Blog_Main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,10 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Blog_Main.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -91,10 +85,7 @@ DATABASES = {
     }
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -110,71 +101,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = '/static/'
-STATICFILES_DIRS=[
-    STATIC_DIR
-]
+STATICFILES_DIRS = [STATIC_DIR]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+# Crispy Forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-#Media File configurations
-
-MEDIA_URL ='/media/'
-
-MEDIA_ROOt =BASE_DIR/'media'
-
-
-CRISPY_TEMPLATE_PACK ='bootstrap4'
-
-
-
-
-# settings.py
-
+# Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'nawazdanish6000gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = 'danish123@24w2'  # Replace with your password or app-specific password
-
-
-# # settings.py
-# STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     BASE_DIR / "blogs/static",  # Adjust this according to your directory structure
-# ]
-
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-# Ensure that Django uses Whitenoise for serving static files
+EMAIL_HOST_USER = 'nawazdanish6000gmail.com'
+EMAIL_HOST_PASSWORD = 'danish123@24w2'
 

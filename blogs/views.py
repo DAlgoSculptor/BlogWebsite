@@ -2,8 +2,11 @@ from django.shortcuts import render, HttpResponse, redirect
 from .models import Blogs,Category,Comment
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+import json
 
 def posts_by_category(request, category_id):
     # Fetch posts with 'published' status and matching category ID
@@ -67,3 +70,39 @@ def search(request):
    }
 
    return render(request, 'search.html', context)
+
+def firebase_auth(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            uid = data.get('uid')
+            email = data.get('email')
+            display_name = data.get('displayName')
+            provider = data.get('provider')
+
+            # Check if user exists
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                # Create new user
+                username = email.split('@')[0]
+                # Ensure username is unique
+                base_username = username
+                counter = 1
+                while User.objects.filter(username=username).exists():
+                    username = f"{base_username}{counter}"
+                    counter += 1
+
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    first_name=display_name.split()[0] if display_name else '',
+                    last_name=' '.join(display_name.split()[1:]) if display_name else ''
+                )
+
+            # Log the user in
+            login(request, user)
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

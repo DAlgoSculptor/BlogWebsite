@@ -1,81 +1,287 @@
-
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block content %}
+<!-- Debug Information -->
+{% if debug %}
+<div class="debug-info p-3 bg-light mb-4">
+    <h4>Debug Information</h4>
+    <p>MEDIA_URL: {{ MEDIA_URL }}</p>
+    <p>STATIC_URL: {{ STATIC_URL }}</p>
+</div>
+{% endif %}
 
-
-
-    
- {% for post in featured_post %}  
-   {%if forloop.first %}
-<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="background-image: url({{post.blog_image.url}});background-blend-mode: overlay;background-size:cover;">
-    <div class="col-md-8 px-0">
-      <h1 class="display-4 font-italic"><a href="{% url 'blogs' post.slug %}">{{post.title}}</a></h1>
-      <p class="lead my-3">{{post.short_description| truncatewords:25}}</p>
-      <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">Continue reading...</a></p>
+<!-- Hero Section -->
+<div class="hero-section position-relative overflow-hidden">
+    <div class="hero-content text-center text-white py-5">
+        <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInDown">Welcome to CircadiaN Blog</h1>
+        <p class="lead mb-4 animate__animated animate__fadeInUp">Discover amazing stories, insights, and knowledge</p>
+        <div class="search-box animate__animated animate__fadeInUp">
+            <form action="{% url 'search' %}" method="GET" class="d-flex justify-content-center">
+                <div class="input-group w-50">
+                    <input type="text" name="keyword" class="form-control form-control-lg" placeholder="Search articles...">
+                    <button class="btn btn-warning btn-lg" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+<!-- Featured Post Section -->
+<div class="container mt-5">
+    {% for post in featured_post %}  
+    {% if forloop.first %}
+    <div class="featured-post mb-5">
+        <div class="card border-0 shadow-lg hover-shadow">
+            <div class="row g-0">
+                <div class="col-md-6">
+                    {% if post.blog_image %}
+                    <img src="{{ post.blog_image.url }}" class="img-fluid rounded-start h-100" alt="{{ post.title }}" onerror="handleImageError(this)">
+                    {% else %}
+                    <img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded-start h-100" alt="No image available">
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-warning text-dark me-2">Featured</span>
+                            <small class="text-muted">{{post.created_at | timesince}} ago</small>
+                        </div>
+                        <h2 class="card-title mb-3">
+                            <a href="{% url 'blogs' post.slug %}" class="text-dark text-decoration-none hover-text-warning">
+                                {{post.title}}
+                            </a>
+                        </h2>
+                        <p class="card-text mb-4">{{post.short_description}}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'blogs' post.slug %}" class="btn btn-warning">Read More</a>
+                            <small class="text-muted">By {{post.author}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endif %}
-  {% endfor %}
-<!-- Featured post-->
-<h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">Featured_post</h3>
-  <div class="row mb-2">
-    {% for post in featured_post %}
-     {% if not forloop.first %}
-    <div class="col-md-6">
-      <div class="card border-0" >
-        <div class="card-body">
-          <h3><a href="{% url 'blogs' post.slug %}">{{post.title}}</a></h3>
-          <small class="mb-1 text-muted">{{post.created_at | timesince}} ago|{{post.author}}</small>
-          <p class="card-text">{{post.short_description | truncatewords:25}}</p>
+    {% endfor %}
+
+    <!-- Recent Articles Section -->
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h3 class="section-title mb-4">Recent Articles</h3>
+            <div class="row">
+                {% for post in posts %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        {% if post.blog_image %}
+                        <img src="{{ post.blog_image.url }}" class="card-img-top" alt="{{ post.title }}" onerror="handleImageError(this)">
+                        {% else %}
+                        <img src="{% static 'images/placeholder.jpg' %}" class="card-img-top" alt="No image available">
+                        {% endif %}
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <small class="text-muted">{{post.created_at | timesince}} ago</small>
+                                <span class="mx-2">•</span>
+                                <small class="text-muted">{{post.author}}</small>
+                            </div>
+                            <h5 class="card-title">
+                                <a href="{% url 'blogs' post.slug %}" class="text-dark text-decoration-none hover-text-warning">
+                                    {{post.title}}
+                                </a>
+                            </h5>
+                            <p class="card-text">{{post.short_description|truncatewords:20}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-      </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <!-- About Section -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">About Me</h4>
+                    <div class="about-content">
+                        <p class="mb-0">I am <span class="highlight">Danish Nawaz</span>, a passionate Computer Science Engineering student in my 3rd year. I continually explore the latest trends in technology and strive to create innovative solutions that improve everyday life.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Section -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Subscribe to Newsletter</h4>
+                    <form class="newsletter-form">
+                        <div class="mb-3">
+                            <input type="email" class="form-control" placeholder="Enter your email">
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Follow Me</h4>
+                    <div class="social-links">
+                        <a href="https://github.com/DAlgoSculptor" class="btn btn-outline-dark me-2 mb-2">
+                            <i class="fa fa-github"></i> GitHub
+                        </a>
+                        <a href="https://www.linkedin.com/in/danish-nawaz-86154028a/" class="btn btn-outline-primary me-2 mb-2">
+                            <i class="fa fa-linkedin"></i> LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-     {%endif%}
-    {%endfor%}
-  
-  <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">Recent Articles</h3>
-  <main role="main" class="container p-0">
-    <div class="row">
-      <div class="col-md-8 blog-main">
-        {% for post in posts %}
-        <div class="card border-0" >
-          <div class="card-body">
-            <h3><a href="{% url 'blogs' post.slug %}">{{post.title}}</a></h3>
-            <small class="mb-1 text-muted">{{post.created_at | timesince}} ago|{{post.author}}</small>
-            <p class="card-text">{{post.short_description| truncatewords:25}}</p>
-          </div>
-        </div>
-        {%endfor%}
-      
-
-      </div>
-      <!-- /.blog-main -->
-
-      <aside class="col-md-4 blog-sidebar">
-        <div class="p-3 mb-3 bg-light" style="border-radius: 15px; border: 3px solid #ffc107; transition: border-color 0.3s ease; overflow: hidden;">
-          <h4 class="" style="color: warning; font-size: 1.5rem; margin-bottom: 1rem; bg">About</h4>
-          <h4>Hello!</h4>
-          {% comment %} <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p> {% endcomment %}
-          <p class="mb-0" style="font-size: 1.1rem; color: #333; transition: all 0.3s ease; padding: 10px; border-radius: 5px; background-color: #f7f7f7;">
-            I am <span class="highlight" style="color: #ffc107; font-weight: bold; cursor: pointer;" title="Click to know more about Danish Nawaz">Danish Nawaz</span>, a passionate <span class="highlight" style="color: #28a745;" title="Click to learn more about Computer Science Engineering">Computer Science Engineering student</span> in my 3rd year. I continually explore the latest trends in technology and strive to create innovative solutions that improve everyday life. My journey has led me through various projects in <span class="highlight" style="color: #007bff;" title="Explore my Web Development projects">web development</span> and <span class="highlight" style="color: #007bff;" title="Explore my Software Engineering projects">software engineering</span>, allowing me to harness the power of technology to make a positive impact. Whether it's designing user-friendly applications or delving into the intricacies of <span class="highlight" style="color: #17a2b8;" title="Learn about AI projects">AI</span>, I am committed to learning and growing in this ever-evolving field.
-          </p>
-          
-      </div>
-      
-
-        <div class="p-3">
-          <h4 class="font-bold">Follow Me!!  ⬇️</h4>
-          <ol class="list-unstyled">
-            <li><a href="https://github.com/DAlgoSculptor">GitHub</a></li>
-            <li><a href="https://www.linkedin.com/in/danish-nawaz-86154028a/">LinkedIn</a></li>
-          </ol>
-        </div>
-      </aside><!-- /.blog-sidebar -->
-
-    </div><!-- /.row -->
-
-  </main><!-- /.container -->
-
 </div>
+
+<style>
+    .hero-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .hero-content h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+
+    .hero-content p {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        color: #666;
+    }
+
+    .search-box {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+        .hero-content h1 {
+            font-size: 2.5rem;
+        }
+        
+        .hero-content p {
+            font-size: 1.1rem;
+        }
+        
+        .search-box {
+            max-width: 100%;
+        }
+    }
+
+    .hover-shadow {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+
+    .hover-text-warning:hover {
+        color: #ffc107 !important;
+    }
+
+    .section-title {
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .section-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: #ffc107;
+    }
+
+    .highlight {
+        color: #ffc107;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .highlight:hover {
+        color: #ff9800;
+    }
+
+    .newsletter-form input {
+        border: 2px solid #e9ecef;
+        transition: border-color 0.3s ease;
+    }
+
+    .newsletter-form input:focus {
+        border-color: #ffc107;
+        box-shadow: none;
+    }
+
+    .social-links .btn {
+        transition: all 0.3s ease;
+    }
+
+    .social-links .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .debug-info {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+</style>
+
+<script>
+    // Add smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Add animation on scroll
+    const animateOnScroll = () => {
+        const elements = document.querySelectorAll('.card, .section-title');
+        elements.forEach(element => {
+            const elementPosition = element.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight;
+            if(elementPosition < screenPosition) {
+                element.classList.add('animate__animated', 'animate__fadeInUp');
+            }
+        });
+    };
+
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+
+    function handleImageError(img) {
+        img.onerror = null;
+        img.src = '{% static "images/placeholder.jpg" %}';
+    }
+</script>
 {% endblock %}

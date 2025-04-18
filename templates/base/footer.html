@@ -1,6 +1,250 @@
-<footer class="blog-footer">
-    <strong>Django blog built with � by <a href="https://www.youtube.com/channel/UCe2mhVHUzVlzT8hfPDHDQjA">Danish Nawaz</a></strong>
-  </footer>
+<footer class="footer">
+    <div class="footer-content">
+        <div class="container">
+            <div class="row">
+                <!-- About Section -->
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                    <div class="footer-about">
+                        <h5 class="footer-title">About CircadiaN Blog</h5>
+                        <p class="footer-text">A modern blog platform built with Django, featuring the latest in technology, programming, and innovation. Join our community of tech enthusiasts and developers.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/DAlgoSculptor" class="social-link" target="_blank">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/danish-nawaz-86154028a/" class="social-link" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="https://www.youtube.com/channel/UCe2mhVHUzVlzT8hfPDHDQjA" class="social-link" target="_blank">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+                    <div class="footer-links">
+                        <h5 class="footer-title">Quick Links</h5>
+                        <ul class="footer-list">
+                            <li><a href="/">Home</a></li>
+                            <li><a href="{% url 'search' %}">Search</a></li>
+                            {% if not user.is_authenticated %}
+                            <li><a href="{% url 'Login' %}">Login</a></li>
+                            <li><a href="{% url 'register' %}">Register</a></li>
+                            {% else %}
+                            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+                    <div class="footer-links">
+                        <h5 class="footer-title">Categories</h5>
+                        <ul class="footer-list">
+                            {% for cat in categories %}
+                            <li><a href="{% url 'posts_by_category' cat.id %}">{{ cat.category_name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-newsletter">
+                        <h5 class="footer-title">Subscribe to Newsletter</h5>
+                        <p class="footer-text">Stay updated with our latest posts and news.</p>
+                        <form class="newsletter-form">
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="Enter your email">
+                                <button class="btn btn-warning" type="submit">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="copyright-text">&copy; {% now "Y" %} CircadiaN Blog. All rights reserved.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer {
+        background-color: var(--secondary-color);
+        color: white;
+        padding-top: 3rem;
+        margin-top: 3rem;
+    }
+
+    .footer-content {
+        padding-bottom: 2rem;
+    }
+
+    .footer-title {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .footer-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background-color: var(--primary-color);
+    }
+
+    .footer-text {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .social-link {
+        color: white;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+    }
+
+    .social-link:hover {
+        color: var(--primary-color);
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+    }
+
+    .footer-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-list li {
+        margin-bottom: 0.8rem;
+    }
+
+    .footer-list a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .footer-list a:hover {
+        color: var(--primary-color);
+        transform: translateX(5px);
+    }
+
+    .newsletter-form .input-group {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 25px;
+        overflow: hidden;
+    }
+
+    .newsletter-form .form-control {
+        background-color: transparent;
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+    }
+
+    .newsletter-form .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .newsletter-form .btn {
+        border-radius: 0;
+        padding: 0.5rem 1.5rem;
+    }
+
+    .footer-bottom {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 1rem 0;
+        margin-top: 2rem;
+    }
+
+    .copyright-text {
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0;
+    }
+
+    .footer-bottom-links {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1.5rem;
+    }
+
+    .footer-bottom-links a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer-bottom-links a:hover {
+        color: var(--primary-color);
+    }
+
+    @media (max-width: 991.98px) {
+        .footer-bottom-links {
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .copyright-text {
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .footer {
+            text-align: center;
+        }
+
+        .footer-title::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .social-links {
+            justify-content: center;
+        }
+    }
+</style>
   
 
  

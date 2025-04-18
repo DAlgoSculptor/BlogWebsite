@@ -1,42 +1,77 @@
-
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block content %}
-    
- {% comment %} {% for post in featured_post %}  
-   {%if forloop.first %}
-<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="background-image: url({{post.blog_image.url}});background-blend-mode: overlay;background-size:cover;">
-    <div class="col-md-8 px-0">
-      <h1 class="display-4 font-italic">{{ post.title}}</h1>
-      <p class="lead my-3">{{post.short_description| truncatewords:25}}</p>
-      <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">Continue reading...</a></p>
+<div class="container mt-4">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <h1 class="mb-4">{{ category }}</h1>
+            
+            {% for post in posts %}
+            <div class="post-item mb-4">
+                <div class="row">
+                    {% if post.blog_image %}
+                    <div class="col-md-4">
+                        <img src="{{ post.blog_image.url }}" alt="{{ post.title }}" class="img-fluid rounded">
+                    </div>
+                    {% endif %}
+                    <div class="{% if post.blog_image %}col-md-8{% else %}col-12{% endif %}">
+                        <h2 class="h4 mb-2">
+                            <a href="{% url 'blogs' post.slug %}" class="text-dark text-decoration-none">
+                                {{ post.title }}
+                            </a>
+                        </h2>
+                        <p class="text-muted small mb-2">
+                            {{ post.created_at|date:"F j, Y" }} • By {{ post.author }}
+                        </p>
+                        <p class="mb-0">{{ post.short_description|truncatewords:30 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-5">
+                <p class="text-muted">No articles found in this category.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">About {{ category }}</h5>
+                    <p class="card-text">Discover the latest developments and insights in the field of science.</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-    {% endif %}
-  {% endfor %} {% endcomment %}
 
-  
-  <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">Category -{{category}}</h3>
-  <main role="main" class="container p-0">
-    <div class="row">
-      <div class="col-md-8 blog-main">
-        {% for post in posts %}
-        <div class="card border-0" >
-          <div class="card-body">
-            <h3><a href="{% url 'blogs' post.slug %}">{{post.title}}</a></h3>
-            <small class="mb-1 text-muted">{{post.created_at | timesince}} ago|{{post.author}}</small>
-            <p class="card-text">{{post.short_description| truncatewords:25}}</p>
-          </div>
-        </div>
-        {%endfor%}
-      
+<style>
+    .post-item {
+        padding: 1.5rem;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
 
-      </div>
+    .post-item:hover {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
 
+    .post-item h2 a:hover {
+        color: #007bff;
+    }
 
-    </div><!-- /.row -->
-
-  </main><!-- /.container -->
-
-</div>
+    @media (max-width: 767.98px) {
+        .post-item {
+            padding: 1rem;
+        }
+        
+        .post-item img {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
 {% endblock %}

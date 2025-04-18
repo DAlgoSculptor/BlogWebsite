@@ -1,14 +1,100 @@
-<!-- Header part-->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CircadiaN Blog{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+    <style>
+        /* Dark mode styles for main content */
+        [data-theme="dark"] main {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
 
-{% include "./header.html" %}
+        [data-theme="dark"] .card {
+            background-color: #2d2d2d;
+            border-color: #404040;
+        }
 
-<!-- Main content Part-->
-{% block content %}
+        [data-theme="dark"] .card-title,
+        [data-theme="dark"] .card-text {
+            color: #ffffff;
+        }
 
+        [data-theme="dark"] .form-control {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: #404040;
+        }
 
-{% endblock %}
+        [data-theme="dark"] .form-control:focus {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: #4dabf7;
+            box-shadow: 0 0 0 0.25rem rgba(77, 171, 247, 0.25);
+        }
 
-<!-- Footer-->
+        [data-theme="dark"] .form-label {
+            color: #ffffff;
+        }
 
+        [data-theme="dark"] .alert {
+            background-color: #2d2d2d;
+            border-color: #404040;
+            color: #ffffff;
+        }
 
-{% include "./footer.html" %}
+        [data-theme="dark"] .text-muted {
+            color: #adb5bd !important;
+        }
+    </style>
+</head>
+<body>
+    {% include 'base/header.html' %}
+    
+    <main class="container mt-4">
+        {% block content %}{% endblock %}
+    </main>
+    
+    {% include 'base/footer.html' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script>
+        // Initialize Firebase with configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaJMPsOvYxrlM0wkIz_PKWVQllwe0HavA",
+            authDomain: "blogwebsite-6601f.firebaseapp.com",
+            projectId: "blogwebsite-6601f",
+            storageBucket: "blogwebsite-6601f.firebasestorage.app",
+            messagingSenderId: "626667772850",
+            appId: "1:626667772850:web:68209869e7c49267cb22ab"
+        };
+        
+        try {
+            // Initialize Firebase
+            const app = firebase.initializeApp(firebaseConfig);
+            console.log('Firebase initialized successfully');
+            
+            // Set persistence to LOCAL
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+                .then(() => {
+                    console.log('Auth persistence set to LOCAL');
+                })
+                .catch((error) => {
+                    console.error('Error setting auth persistence:', error);
+                });
+        } catch (error) {
+            console.error('Firebase initialization error:', error);
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -7,7 +7,7 @@ from blogs import views as BlogsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # Admin panel route
-    path('/', views.home, name="home"),  # Home page route
+    path('', views.home, name="home"),  # Home page route
     path('category/', include('blogs.urls')),  # Include URLs from the 'blogs' app
     path('blogs/<slug:slug>/', BlogsView.blogs , name='blogs'),
     path('search/' , BlogsView.search, name='search'),
